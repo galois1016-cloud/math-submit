@@ -371,7 +371,7 @@ async function doLogin() {
       currentUser = { name, pw, ...TEACHERS.find(t => t.name === name) };
       showResults(json.items);
     } else {
-      showLoginErr(json.message || '비밀번호가 올바르지 않거나 제출 내역이 없습니다.');
+      showLoginErr(json.message || '비밀번호가 올바르지 않거나 제출 내역이 없습니다. 문의: 관리자(대전전민고 김태환)');
     }
   } catch (err) {
     hideLoading();

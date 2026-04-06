@@ -137,9 +137,15 @@
   .res-card{background:var(--gray-soft);border-radius:10px;padding:14px 18px;margin:14px 0;
     text-align:left;font-size:12px;color:var(--gray-dark);line-height:2}
   .res-card span{font-weight:700;color:var(--blue-deep)}
-  .no-badge{display:inline-block;background:linear-gradient(135deg,var(--blue-mid),var(--teal-mid));
-    color:#fff;font-size:13px;font-weight:700;font-family:'Gmarket Sans',sans-serif;
+  .no-badge{display:inline-block;background:#eaf4ff;border:1.5px solid var(--blue-light);
+    color:var(--blue-deep);font-size:13px;font-weight:700;font-family:'Gmarket Sans',sans-serif;
     padding:2px 12px;border-radius:20px;margin-left:4px}
+  /* X close button on success overlay */
+  .succ-close{position:absolute;top:14px;right:14px;width:32px;height:32px;border-radius:50%;
+    background:rgba(0,0,0,.07);border:none;cursor:pointer;font-size:16px;color:var(--gray-dark);
+    display:flex;align-items:center;justify-content:center;transition:background .2s}
+  .succ-close:hover{background:rgba(0,0,0,.14)}
+  .succ-box{position:relative}
   .drive-path{font-size:11px;font-family:'Courier New',monospace;background:rgba(13,140,124,.08);
     color:var(--teal-deep);padding:5px 10px;border-radius:6px;margin-top:6px;word-break:break-all}
   .btn-again{margin-top:12px;padding:11px 28px;border-radius:50px;
@@ -167,7 +173,7 @@
 </div>
 
 <div class="nav-tabs">
-  <a href="submit.html" class="nav-tab active">📤 문항 제출</a>
+  <a href="index.html" class="nav-tab active">📤 문항 제출</a>
   <a href="manage.html" class="nav-tab inactive">🔍 제출 조회 · 수정</a>
 </div>
 
@@ -288,11 +294,12 @@
 <!-- 완료 -->
 <div class="overlay" id="successOverlay">
   <div class="succ-box">
+    <button class="succ-close" id="closeSuccessBtn" title="닫기">✕</button>
     <div class="chk-circle">✓</div>
     <h4>제출 완료!</h4>
     <p>문항이 성공적으로 제출되었습니다.</p>
     <div class="res-card" id="resCard"></div>
-    <p style="font-size:11px;color:var(--gray-mid)">🔐 비밀번호를 분실하면 관리자에게 문의해 주세요.</p>
+    <p style="font-size:11px;color:var(--gray-mid)">🔐 비밀번호를 분실하면 관리자(대전전민고 김태환)에게 문의해 주세요.</p>
     <button class="btn-again" id="againBtn">🔄 다른 문항 제출하기</button>
   </div>
 </div>
@@ -480,6 +487,18 @@ function showSuccess(json,teacher,ext){
 document.getElementById('againBtn').addEventListener('click',()=>{
   document.getElementById('successOverlay').classList.remove('show'); resetForm();
 });
+document.getElementById('closeSuccessBtn').addEventListener('click',()=>{
+  document.getElementById('successOverlay').classList.remove('show'); resetForm();
+});
+// ESC key closes success overlay
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    const overlay = document.getElementById('successOverlay');
+    if (overlay.classList.contains('show')) {
+      overlay.classList.remove('show'); resetForm();
+    }
+  }
+});
 
 function resetForm(){
   nameInput.value=''; nameInput.classList.remove('name-err'); nameHint.className='name-hint'; clearTeacher();
@@ -490,9 +509,15 @@ function resetForm(){
 }
 
 document.getElementById('tmplBtn').addEventListener('click',()=>{
-  const URL="https://github.com/galois1016-cloud/math-submit/blob/main/form.hwp"; // ← HWP 공유 URL로 교체
-  if(!URL){alert('양식 파일 준비 중입니다.\n관리자에게 문의해 주세요.');return;}
-  window.open(URL,'_blank');
+  const RAW_URL = ""; // ← raw.githubusercontent.com 링크로 교체
+  if(!RAW_URL){alert('양식 파일 준비 중입니다.\n관리자(대전전민고 김태환)에게 문의해 주세요.');return;}
+  // Force download via anchor element
+  const a = document.createElement('a');
+  a.href = RAW_URL;
+  a.download = '문항작성양식.hwp';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
 });
 </script>
 </body>
