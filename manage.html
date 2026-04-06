@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>제출 조회 · 삭제 | 2026 고교 수학 창의적 문항 개발</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Gmarket+Sans:wght@300;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --teal-deep:  #0a5c6b; --teal-mid:#0d8c7c; --teal-light:#10b68c;
+    --blue-deep:  #0d3d6b; --blue-mid:#1565c0; --blue-light:#42a5f5;
+    --mint-glow:  #e0f7f4; --ocean-glow:#e3f2fd;
+    --gray-soft:  #f0f4f8; --gray-mid:#90a4ae; --gray-dark:#455a64;
+    --danger:     #d32f2f; --danger-light:#ffebee;
+    --white:      #ffffff;
+  }
+  *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+  body {
+    font-family:'Noto Sans KR', sans-serif; min-height:100vh;
+    background: linear-gradient(145deg,#0d3d6b 0%,#0a5c6b 45%,#0d8c7c 75%,#10b68c 100%);
+    display:flex; flex-direction:column; align-items:center;
+    padding:36px 16px 60px; position:relative; overflow-x:hidden;
+  }
+  body::before {
+    content:''; position:fixed; top:-150px; right:-150px;
+    width:500px; height:500px; border-radius:50%;
+    background:radial-gradient(circle,rgba(66,165,245,.15) 0%,transparent 70%);
+    pointer-events:none;
+  }
+
+  .header { text-align:center; margin-bottom:28px; animation:fadeDown .6s ease both; }
+  .header .badge {
+    display:inline-block; background:rgba(255,255,255,.15);
+    border:1px solid rgba(255,255,255,.3); backdrop-filter:blur(8px);
+    color:#fff; font-size:11px; font-weight:500; letter-spacing:2px;
+    text-transform:uppercase; padding:4px 16px; border-radius:20px; margin-bottom:12px;
+  }
+  .header h1 {
+    font-family:'Gmarket Sans',sans-serif; font-size:clamp(20px,4.5vw,28px);
+    font-weight:700; color:#fff; letter-spacing:-0.5px; text-shadow:0 2px 16px rgba(0,0,0,.2);
+  }
+  .header p { margin-top:8px; color:rgba(255,255,255,.7); font-size:13px; line-height:1.6; }
+
+  .nav-tabs { display:flex; gap:8px; margin-bottom:24px; animation:fadeDown .6s ease both .1s; }
+  .nav-tab {
+    padding:9px 22px; border-radius:50px; font-family:'Gmarket Sans',sans-serif;
+    font-size:13px; font-weight:700; cursor:pointer; transition:all .2s;
+    text-decoration:none; border:none;
+  }
+  .nav-tab.active { background:#fff; color:var(--blue-deep); box-shadow:0 4px 16px rgba(0,0,0,.2); }
+  .nav-tab.inactive {
+    background:rgba(255,255,255,.18); color:rgba(255,255,255,.9);
+    border:1px solid rgba(255,255,255,.3);
+  }
+  .nav-tab.inactive:hover { background:rgba(255,255,255,.28); }
+
+  .card {
+    background:rgba(255,255,255,.97); border-radius:22px;
+    width:100%; max-width:620px;
+    box-shadow:0 24px 64px rgba(10,30,60,.28), 0 0 0 1px rgba(255,255,255,.5);
+    overflow:hidden; animation:fadeUp .6s ease both .15s;
+  }
+  .card-top {
+    background:linear-gradient(100deg, var(--blue-deep) 0%, var(--teal-deep) 100%);
+    padding:24px 30px 20px; position:relative; overflow:hidden;
+  }
+  .card-top::after { content:'🔍'; font-size:90px; position:absolute; right:16px; top:-14px; opacity:.07; pointer-events:none; }
+  .card-top h2 { font-family:'Gmarket Sans',sans-serif; font-size:16px; font-weight:700; color:#fff; }
+  .card-top p  { font-size:12px; color:rgba(255,255,255,.6); margin-top:4px; }
+  .card-body   { padding:28px 30px; }
+
+  .section-label {
+    font-size:11px; font-weight:700; letter-spacing:1.5px;
+    color:var(--teal-deep); text-transform:uppercase;
+    margin-bottom:14px; padding-bottom:6px; border-bottom:2px solid var(--mint-glow);
+  }
+  .form-group { margin-bottom:16px; }
+  .form-group label { display:block; font-size:12px; font-weight:700; color:var(--blue-deep); margin-bottom:6px; }
+  .form-row { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+
+  input[type=text], input[type=password] {
+    width:100%; padding:10px 13px; border:1.5px solid #dde3ea; border-radius:10px;
+    font-family:'Noto Sans KR',sans-serif; font-size:13px; color:var(--gray-dark);
+    background:#fff; transition:border-color .2s, box-shadow .2s;
+  }
+  input:focus { outline:none; border-color:var(--teal-mid); box-shadow:0 0 0 3px rgba(13,140,124,.12); }
+
+  .btn-login {
+    width:100%; padding:13px; border:none; border-radius:12px;
+    background:linear-gradient(135deg, var(--blue-mid), var(--teal-mid));
+    color:#fff; font-family:'Gmarket Sans',sans-serif; font-size:15px; font-weight:700;
+    cursor:pointer; box-shadow:0 4px 18px rgba(13,101,192,.35); transition:all .2s;
+  }
+  .btn-login:hover { transform:translateY(-2px); box-shadow:0 8px 24px rgba(13,101,192,.45); }
+
+  .login-err {
+    background:var(--danger-light); color:var(--danger); border-radius:8px;
+    padding:10px 14px; font-size:12px; text-align:center; margin-top:12px; display:none;
+  }
+
+  /* Results section */
+  .results-section { display:none; }
+  .results-header {
+    display:flex; align-items:center; justify-content:space-between;
+    margin-bottom:16px; flex-wrap:wrap; gap:8px;
+  }
+  .results-header h3 { font-family:'Gmarket Sans',sans-serif; font-size:15px; color:var(--blue-deep); }
+  .btn-logout {
+    padding:6px 14px; background:var(--gray-soft); border:1.5px solid #dde3ea;
+    border-radius:8px; font-family:'Gmarket Sans',sans-serif; font-size:12px;
+    font-weight:700; cursor:pointer; color:var(--gray-dark); transition:all .2s;
+  }
+  .btn-logout:hover { background:#e0e6ea; }
+
+  .teacher-badge {
+    background:linear-gradient(135deg, var(--ocean-glow), var(--mint-glow));
+    border:1px solid rgba(13,140,124,.2); border-radius:12px;
+    padding:14px 18px; margin-bottom:18px;
+    display:flex; align-items:center; gap:12px;
+  }
+  .teacher-badge .avatar {
+    width:40px; height:40px; border-radius:50%;
+    background:linear-gradient(135deg, var(--blue-mid), var(--teal-mid));
+    display:flex; align-items:center; justify-content:center;
+    color:#fff; font-family:'Gmarket Sans',sans-serif; font-size:16px; font-weight:700;
+    flex-shrink:0;
+  }
+  .teacher-badge .info { font-size:12px; color:var(--gray-dark); line-height:1.7; }
+  .teacher-badge .info strong { font-size:14px; color:var(--blue-deep); display:block; }
+
+  .no-items {
+    text-align:center; padding:32px 20px; color:var(--gray-mid); font-size:13px;
+    background:var(--gray-soft); border-radius:12px;
+  }
+  .no-items .ni-icon { font-size:36px; margin-bottom:10px; }
+
+  /* Item card */
+  .item-card {
+    border:1.5px solid #e8ecef; border-radius:14px; margin-bottom:12px;
+    overflow:hidden; transition:box-shadow .2s;
+  }
+  .item-card:hover { box-shadow:0 4px 18px rgba(10,30,60,.1); }
+  .item-card-top {
+    display:flex; align-items:center; justify-content:space-between;
+    padding:14px 18px; background:var(--gray-soft);
+  }
+  .item-no {
+    font-family:'Gmarket Sans',sans-serif; font-size:13px; font-weight:700;
+    background:linear-gradient(135deg, var(--blue-mid), var(--teal-mid));
+    color:#fff; padding:3px 12px; border-radius:20px;
+  }
+  .item-date { font-size:11px; color:var(--gray-mid); }
+  .item-card-body { padding:14px 18px; }
+  .item-meta { display:grid; grid-template-columns:1fr 1fr; gap:6px; margin-bottom:10px; }
+  .meta-item { font-size:12px; color:var(--gray-dark); }
+  .meta-item span { color:var(--blue-deep); font-weight:500; }
+  .item-filename {
+    font-size:11px; color:var(--teal-deep); font-family:'Courier New', monospace;
+    background:rgba(13,140,124,.08); padding:5px 10px; border-radius:6px;
+    word-break:break-all; margin-bottom:12px;
+  }
+
+  .status-badge {
+    display:inline-block; font-size:10px; font-weight:700; padding:2px 10px; border-radius:10px;
+    margin-left:8px;
+  }
+  .status-active  { background:#e8f5e9; color:var(--success); }
+  .status-deleted { background:var(--danger-light); color:var(--danger); }
+
+  .btn-delete {
+    width:100%; padding:9px; border:1.5px solid rgba(211,47,47,.3);
+    border-radius:8px; background:var(--danger-light);
+    color:var(--danger); font-family:'Gmarket Sans',sans-serif;
+    font-size:12px; font-weight:700; cursor:pointer; transition:all .2s;
+  }
+  .btn-delete:hover { background:#ffcdd2; border-color:var(--danger); }
+  .btn-delete:disabled { opacity:.4; cursor:not-allowed; }
+
+  /* Delete confirm modal */
+  .overlay {
+    display:none; position:fixed; inset:0;
+    background:rgba(13,61,107,.7); backdrop-filter:blur(6px);
+    z-index:200; align-items:center; justify-content:center; padding:16px;
+  }
+  .overlay.show { display:flex; }
+  .del-modal {
+    background:#fff; border-radius:18px; width:100%; max-width:360px;
+    box-shadow:0 24px 60px rgba(10,30,60,.35);
+    overflow:hidden; animation:slideUp .3s cubic-bezier(.34,1.56,.64,1);
+  }
+  .del-modal-top { background:var(--danger); padding:20px 24px; text-align:center; }
+  .del-modal-top .del-icon { font-size:36px; }
+  .del-modal-top h4 { font-family:'Gmarket Sans',sans-serif; font-size:15px; color:#fff; margin-top:6px; }
+  .del-modal-body { padding:20px 24px; }
+  .del-modal-body p { font-size:13px; color:var(--gray-dark); text-align:center; line-height:1.8; margin-bottom:16px; }
+  .del-modal-body p strong { color:var(--blue-deep); }
+  .del-pw-input { width:100%; padding:10px 13px; border:1.5px solid #dde3ea; border-radius:10px; font-size:13px; font-family:'Noto Sans KR',sans-serif; margin-bottom:10px; }
+  .del-pw-input:focus { outline:none; border-color:var(--danger); box-shadow:0 0 0 3px rgba(211,47,47,.12); }
+  .del-err { font-size:12px; color:var(--danger); text-align:center; margin-bottom:10px; display:none; }
+  .del-btn-row { display:flex; gap:10px; }
+  .btn-del-cancel { flex:1; padding:10px; background:var(--gray-soft); border:1.5px solid #dde3ea; border-radius:8px; font-family:'Gmarket Sans',sans-serif; font-size:13px; font-weight:700; cursor:pointer; color:var(--gray-dark); }
+  .btn-del-ok { flex:1; padding:10px; background:var(--danger); border:none; border-radius:8px; font-family:'Gmarket Sans',sans-serif; font-size:13px; font-weight:700; cursor:pointer; color:#fff; box-shadow:0 4px 12px rgba(211,47,47,.3); }
+
+  /* Spinner overlay */
+  .loading-overlay {
+    display:none; position:fixed; inset:0;
+    background:rgba(13,61,107,.6); backdrop-filter:blur(4px);
+    z-index:300; align-items:center; justify-content:center;
+  }
+  .loading-overlay.show { display:flex; }
+  .spinner-box { background:#fff; border-radius:16px; padding:28px 36px; text-align:center; }
+  .spinner { width:44px; height:44px; border-radius:50%; border:4px solid rgba(13,140,124,.15); border-top-color:var(--teal-mid); animation:spin .8s linear infinite; margin:0 auto 12px; }
+  .spinner-box p { font-size:13px; color:var(--gray-dark); font-weight:500; }
+
+  .footer { margin-top:24px; color:rgba(255,255,255,.4); font-size:11px; text-align:center; animation:fadeUp .6s ease both .3s; }
+
+  @keyframes fadeDown { from { opacity:0; transform:translateY(-18px); } to { opacity:1; transform:none; } }
+  @keyframes fadeUp   { from { opacity:0; transform:translateY(18px);  } to { opacity:1; transform:none; } }
+  @keyframes slideUp  { from { opacity:0; transform:translateY(28px) scale(.97); } to { opacity:1; transform:none; } }
+  @keyframes spin     { to { transform:rotate(360deg); } }
+
+  @media (max-width:480px) {
+    .form-row { grid-template-columns:1fr; }
+    .card-body { padding:22px 18px; }
+    .item-meta { grid-template-columns:1fr; }
+    .results-header { flex-direction:column; align-items:flex-start; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="badge">2026 수학 창의적 문항 개발 연구회</div>
+  <h1>제출 조회 · 수정</h1>
+  <p>이름과 비밀번호로 본인의 제출 문항을 확인하세요.</p>
+</div>
+
+<div class="nav-tabs">
+  <a href="index.html" class="nav-tab inactive">📤 문항 제출</a>
+  <a href="manage.html" class="nav-tab active">🔍 제출 조회 · 수정</a>
+</div>
+
+<div class="card">
+  <div class="card-top">
+    <h2>🔐 본인 확인</h2>
+    <p>제출 시 입력한 이름과 비밀번호를 입력해 주세요.</p>
+  </div>
+  <div class="card-body">
+
+    <!-- Login section -->
+    <div id="loginSection">
+      <div class="section-label">본인 확인</div>
+      <div class="form-group">
+        <label>이름 (아이디)</label>
+        <input type="text" id="loginName" placeholder="이름을 입력하세요." autocomplete="off">
+      </div>
+      <div class="form-group">
+        <label>비밀번호</label>
+        <input type="password" id="loginPw" placeholder="비밀번호를 입력하세요." maxlength="20">
+      </div>
+      <button class="btn-login" id="loginBtn">🔍 내 제출 문항 조회하기</button>
+      <div class="login-err" id="loginErr"></div>
+    </div>
+
+    <!-- Results section -->
+    <div class="results-section" id="resultsSection">
+      <div class="results-header">
+        <h3>📋 제출 문항 목록</h3>
+        <button class="btn-logout" id="logoutBtn">↩ 다른 계정</button>
+      </div>
+      <div class="teacher-badge" id="teacherBadge"></div>
+      <div id="itemList"></div>
+    </div>
+
+  </div>
+</div>
+
+<div class="footer">대전광역시교육청 · 2026 고교 수학 창의적 문항 개발 연구회</div>
+
+<!-- Delete confirm modal -->
+<div class="overlay" id="delOverlay">
+  <div class="del-modal">
+    <div class="del-modal-top">
+      <div class="del-icon">🗑️</div>
+      <h4>문항 삭제 확인</h4>
+    </div>
+    <div class="del-modal-body">
+      <p>문항 <strong id="delItemNo"></strong>을(를) 삭제하시겠습니까?<br>삭제된 파일은 복구할 수 없습니다.</p>
+      <input type="password" class="del-pw-input" id="delPwInput" placeholder="비밀번호를 입력해 주세요." maxlength="20">
+      <div class="del-err" id="delErr"></div>
+      <div class="del-btn-row">
+        <button class="btn-del-cancel" id="delCancelBtn">취소</button>
+        <button class="btn-del-ok" id="delOkBtn">삭제 확인</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Loading overlay -->
+<div class="loading-overlay" id="loadingOverlay">
+  <div class="spinner-box">
+    <div class="spinner"></div>
+    <p id="loadingMsg">처리 중...</p>
+  </div>
+</div>
+
+<script>
+// =====================================================================
+//  CONFIG
+// =====================================================================
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw5kPbajF8INfXaifVa2uoCj7ofgJpnHJfs7RUaHjEiCkfje1i3dr1jwdWb2IO52V0DCA/exec";
+
+const TEACHERS = [
+  { name:"조경환", team:"Ⅰ팀", school:"대전매봉중학교" },
+  { name:"한현구", team:"Ⅰ팀", school:"대전과학고등학교" },
+  { name:"한아름", team:"Ⅰ팀", school:"대전여자고등학교" },
+  { name:"박한동", team:"Ⅰ팀", school:"대전용산고등학교" },
+  { name:"김태환", team:"Ⅰ팀", school:"대전전민고등학교" },
+  { name:"권경윤", team:"Ⅱ팀", school:"대전외국어고등학교" },
+  { name:"김미연", team:"Ⅱ팀", school:"대전외국어고등학교" },
+  { name:"민종식", team:"Ⅱ팀", school:"대전외국어고등학교" },
+  { name:"장유리", team:"Ⅱ팀", school:"대전외국어고등학교" },
+  { name:"전태환", team:"Ⅱ팀", school:"대전외국어고등학교" },
+  { name:"김규원", team:"Ⅲ팀", school:"대전대성고등학교" },
+  { name:"김민혁", team:"Ⅲ팀", school:"대전대성고등학교" },
+  { name:"장정호", team:"Ⅲ팀", school:"대전대성고등학교" },
+  { name:"김우진", team:"Ⅲ팀", school:"보문고등학교" },
+  { name:"이남준", team:"Ⅲ팀", school:"보문고등학교" },
+  { name:"이재열", team:"Ⅳ팀", school:"대전중앙중학교" },
+  { name:"임광선", team:"Ⅳ팀", school:"대전중앙고등학교" },
+  { name:"정원호", team:"Ⅳ팀", school:"대전중앙고등학교" },
+  { name:"최준영", team:"Ⅳ팀", school:"대전중앙고등학교" },
+  { name:"김나리", team:"Ⅳ팀", school:"명석고등학교" },
+  { name:"이경민", team:"Ⅳ팀", school:"명석고등학교" },
+];
+
+// =====================================================================
+//  State
+// =====================================================================
+let currentUser = null;
+let pendingDeleteId = null;
+
+// =====================================================================
+//  Login
+// =====================================================================
+const loginBtn  = document.getElementById('loginBtn');
+const loginName = document.getElementById('loginName');
+const loginPw   = document.getElementById('loginPw');
+const loginErr  = document.getElementById('loginErr');
+
+loginBtn.addEventListener('click', doLogin);
+loginPw.addEventListener('keydown', e => { if(e.key==='Enter') doLogin(); });
+loginName.addEventListener('keydown', e => { if(e.key==='Enter') loginPw.focus(); });
+
+async function doLogin() {
+  const name = loginName.value.trim();
+  const pw   = loginPw.value;
+  loginErr.style.display = 'none';
+
+  if (!name || !pw) { showLoginErr('이름과 비밀번호를 모두 입력해 주세요.'); return; }
+  if (!TEACHERS.find(t => t.name === name)) { showLoginErr('등록되지 않은 이름입니다. 정확히 입력해 주세요.'); return; }
+
+  showLoading('조회 중...');
+
+  try {
+    const res  = await fetch(`${SCRIPT_URL}?action=query&name=${encodeURIComponent(name)}&password=${encodeURIComponent(pw)}`);
+    const json = await res.json();
+    hideLoading();
+
+    if (json.status === 'ok') {
+      currentUser = { name, pw, ...TEACHERS.find(t => t.name === name) };
+      showResults(json.items);
+    } else {
+      showLoginErr(json.message || '비밀번호가 올바르지 않거나 제출 내역이 없습니다.');
+    }
+  } catch (err) {
+    hideLoading();
+    // Demo mode
+    console.warn('데모 모드:', err.message);
+    currentUser = { name, pw, ...TEACHERS.find(t => t.name === name) };
+    showResults(getDemoItems(name));
+  }
+}
+
+function showLoginErr(msg) { loginErr.textContent = '⛔ ' + msg; loginErr.style.display = 'block'; }
+
+// =====================================================================
+//  Demo data (when not connected)
+// =====================================================================
+function getDemoItems(name) {
+  return [
+    { id:'row_3', itemNo:'001', subject:'수학Ⅰ', area:'삼각함수', fileName:`Ⅰ팀_수Ⅰ_삼각함수_001.hwp`, submittedAt:'2026-04-10 14:23', status:'active' },
+    { id:'row_7', itemNo:'005', subject:'확률과 통계', area:'경우의 수', fileName:`Ⅰ팀_확통_경우의 수_005.hwp`, submittedAt:'2026-04-11 09:47', status:'active' },
+  ];
+}
+
+// =====================================================================
+//  Show results
+// =====================================================================
+function showResults(items) {
+  document.getElementById('loginSection').style.display = 'none';
+  const rs = document.getElementById('resultsSection');
+  rs.style.display = 'block';
+
+  // Teacher badge
+  document.getElementById('teacherBadge').innerHTML = `
+    <div class="avatar">${currentUser.name[0]}</div>
+    <div class="info">
+      <strong>${currentUser.name}</strong>
+      ${currentUser.team} · ${currentUser.school}
+    </div>
+  `;
+
+  renderItems(items);
+}
+
+function renderItems(items) {
+  const list = document.getElementById('itemList');
+
+  const active = items.filter(i => i.status !== 'deleted');
+
+  if (!active.length) {
+    list.innerHTML = `<div class="no-items"><div class="ni-icon">📭</div>제출된 문항이 없습니다.</div>`;
+    return;
+  }
+
+  list.innerHTML = active.map(item => `
+    <div class="item-card" id="card_${item.id}">
+      <div class="item-card-top">
+        <span class="item-no">No. ${item.itemNo}</span>
+        <span class="item-date">${item.submittedAt}</span>
+      </div>
+      <div class="item-card-body">
+        <div class="item-meta">
+          <div class="meta-item">과목: <span>${item.subject}</span></div>
+          <div class="meta-item">내용영역: <span>${item.area}</span></div>
+        </div>
+        <div class="item-filename">📄 ${item.fileName}</div>
+        <button class="btn-delete" onclick="openDeleteModal('${item.id}','${item.itemNo}')">
+          🗑️ 이 문항 삭제하기
+        </button>
+      </div>
+    </div>
+  `).join('');
+}
+
+// =====================================================================
+//  Logout
+// =====================================================================
+document.getElementById('logoutBtn').addEventListener('click', () => {
+  currentUser = null;
+  document.getElementById('resultsSection').style.display = 'none';
+  document.getElementById('loginSection').style.display = 'block';
+  loginName.value = ''; loginPw.value = ''; loginErr.style.display = 'none';
+});
+
+// =====================================================================
+//  Delete modal
+// =====================================================================
+function openDeleteModal(id, itemNo) {
+  pendingDeleteId = id;
+  document.getElementById('delItemNo').textContent = `No.${itemNo}`;
+  document.getElementById('delPwInput').value = '';
+  document.getElementById('delErr').style.display = 'none';
+  document.getElementById('delOverlay').classList.add('show');
+  setTimeout(() => document.getElementById('delPwInput').focus(), 100);
+}
+
+document.getElementById('delCancelBtn').addEventListener('click', () => {
+  document.getElementById('delOverlay').classList.remove('show');
+  pendingDeleteId = null;
+});
+
+document.getElementById('delOkBtn').addEventListener('click', doDelete);
+document.getElementById('delPwInput').addEventListener('keydown', e => { if(e.key==='Enter') doDelete(); });
+
+async function doDelete() {
+  const pw = document.getElementById('delPwInput').value;
+  const delErr = document.getElementById('delErr');
+  delErr.style.display = 'none';
+
+  if (pw !== currentUser.pw) {
+    delErr.textContent = '⛔ 비밀번호가 올바르지 않습니다.';
+    delErr.style.display = 'block'; return;
+  }
+
+  document.getElementById('delOverlay').classList.remove('show');
+  showLoading('파일 삭제 중...');
+
+  const payload = { action:'delete', rowId: pendingDeleteId, name: currentUser.name, password: pw };
+
+  try {
+    const res  = await fetch(SCRIPT_URL, { method:'POST', body: JSON.stringify(payload) });
+    const json = await res.json();
+    hideLoading();
+
+    if (json.status === 'ok') {
+      const card = document.getElementById('card_' + pendingDeleteId);
+      if (card) { card.style.animation='fadeOut .3s ease forwards'; setTimeout(()=>card.remove(), 300); }
+      pendingDeleteId = null;
+    } else {
+      alert('삭제 오류: ' + (json.message || '알 수 없는 오류'));
+    }
+  } catch (err) {
+    hideLoading();
+    // Demo mode
+    const card = document.getElementById('card_' + pendingDeleteId);
+    if (card) { card.style.animation='fadeOut .3s ease forwards'; setTimeout(()=>card.remove(), 300); }
+    pendingDeleteId = null;
+    console.warn('데모 삭제 처리:', err.message);
+  }
+}
+
+// =====================================================================
+//  Loading helpers
+// =====================================================================
+function showLoading(msg) {
+  document.getElementById('loadingMsg').textContent = msg;
+  document.getElementById('loadingOverlay').classList.add('show');
+}
+function hideLoading() { document.getElementById('loadingOverlay').classList.remove('show'); }
+
+// Fade-out animation
+const style = document.createElement('style');
+style.textContent = '@keyframes fadeOut { to { opacity:0; transform:translateY(-8px); } }';
+document.head.appendChild(style);
+</script>
+</body>
+</html>
