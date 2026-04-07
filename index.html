@@ -6,11 +6,11 @@
 <title>문항 제출 | 2026 고교 수학 창의적 문항 개발</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Gmarket+Sans:wght@300;500;700&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --teal-deep:#0a5c6b; --teal-mid:#0d8c7c; --teal-light:#10b68c;
-    --blue-deep:#0d3d6b; --blue-mid:#1565c0; --blue-light:#42a5f5;
-    --mint-glow:#e0f7f4; --ocean-glow:#e3f2fd;
-    --gray-soft:#f0f4f8; --gray-mid:#90a4ae; --gray-dark:#455a64;
+  :root{
+    --teal-deep:#0a5c6b;--teal-mid:#0d8c7c;
+    --blue-deep:#0d3d6b;--blue-mid:#1565c0;--blue-light:#42a5f5;
+    --mint-glow:#e0f7f4;--ocean-glow:#e3f2fd;
+    --gray-soft:#f0f4f8;--gray-mid:#90a4ae;--gray-dark:#455a64;
     --danger:#d32f2f;
   }
   *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -22,7 +22,6 @@
     border-radius:50%;background:radial-gradient(circle,rgba(66,165,245,.15) 0%,transparent 70%);pointer-events:none}
   body::after{content:'';position:fixed;bottom:-100px;left:-100px;width:400px;height:400px;
     border-radius:50%;background:radial-gradient(circle,rgba(16,182,140,.13) 0%,transparent 70%);pointer-events:none}
-
   .header{text-align:center;margin-bottom:28px;animation:fadeDown .6s ease both}
   .badge{display:inline-block;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);
     backdrop-filter:blur(8px);color:#fff;font-size:11px;font-weight:500;letter-spacing:2px;
@@ -30,14 +29,12 @@
   .header h1{font-family:'Gmarket Sans',sans-serif;font-size:clamp(20px,4.5vw,28px);
     font-weight:700;color:#fff;letter-spacing:-.5px;text-shadow:0 2px 16px rgba(0,0,0,.2)}
   .header p{margin-top:8px;color:rgba(255,255,255,.7);font-size:13px;line-height:1.6}
-
   .nav-tabs{display:flex;gap:8px;margin-bottom:24px;animation:fadeDown .6s ease both .1s}
   .nav-tab{padding:9px 22px;border-radius:50px;font-family:'Gmarket Sans',sans-serif;
     font-size:13px;font-weight:700;cursor:pointer;transition:all .2s;text-decoration:none;border:none}
   .nav-tab.active{background:#fff;color:var(--blue-deep);box-shadow:0 4px 16px rgba(0,0,0,.2)}
   .nav-tab.inactive{background:rgba(255,255,255,.18);color:rgba(255,255,255,.9);border:1px solid rgba(255,255,255,.3)}
   .nav-tab.inactive:hover{background:rgba(255,255,255,.28)}
-
   .card{background:rgba(255,255,255,.97);border-radius:22px;width:100%;max-width:600px;
     box-shadow:0 24px 64px rgba(10,30,60,.28),0 0 0 1px rgba(255,255,255,.5);
     overflow:hidden;animation:fadeUp .6s ease both .15s}
@@ -47,45 +44,38 @@
   .card-top h2{font-family:'Gmarket Sans',sans-serif;font-size:16px;font-weight:700;color:#fff}
   .card-top p{font-size:12px;color:rgba(255,255,255,.6);margin-top:4px}
   .card-body{padding:28px 30px}
-
   .sec-label{font-size:11px;font-weight:700;letter-spacing:1.5px;color:var(--teal-deep);
     text-transform:uppercase;margin-bottom:14px;padding-bottom:6px;border-bottom:2px solid var(--mint-glow)}
   .form-group{margin-bottom:16px}
   .form-group label{display:block;font-size:12px;font-weight:700;color:var(--blue-deep);margin-bottom:6px}
   .req{color:var(--danger);margin-left:2px}
   .form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-
-  input[type=text],input[type=password],select{width:100%;padding:10px 13px;border:1.5px solid #dde3ea;
-    border-radius:10px;font-family:'Noto Sans KR',sans-serif;font-size:13px;color:var(--gray-dark);
+  .divider{height:1px;background:#eef0f4;margin:20px 0}
+  input[type=text],input[type=password],select{
+    width:100%;padding:10px 13px;border:1.5px solid #dde3ea;border-radius:10px;
+    font-family:'Noto Sans KR',sans-serif;font-size:13px;color:var(--gray-dark);
     background:#fff;transition:border-color .2s,box-shadow .2s;-webkit-appearance:none;appearance:none}
   input:focus,select:focus{outline:none;border-color:var(--teal-mid);box-shadow:0 0 0 3px rgba(13,140,124,.12)}
   input:disabled,select:disabled{background:var(--gray-soft);color:var(--gray-mid);cursor:not-allowed;border-color:#e8ecef}
-  input.auto-filled{background:linear-gradient(135deg,#e8f5e9,#e3f2fd)!important;color:var(--blue-deep)!important;
-    font-weight:500;border-color:rgba(13,140,124,.3)!important}
+  input.auto-filled{background:linear-gradient(135deg,#e8f5e9,#e3f2fd)!important;
+    color:var(--blue-deep)!important;font-weight:500;border-color:rgba(13,140,124,.3)!important}
   input.name-err{border-color:var(--danger)!important;box-shadow:0 0 0 3px rgba(211,47,47,.1)!important}
-
   .name-hint{font-size:11px;margin-top:5px;padding:5px 10px;border-radius:6px;display:none}
   .name-hint.ok{background:#e8f5e9;color:#2e7d32;display:block}
   .name-hint.err{background:#ffebee;color:var(--danger);display:block}
-
   .sel-wrap{position:relative}
   .sel-wrap::after{content:'▾';position:absolute;right:12px;top:50%;transform:translateY(-50%);
-    color:var(--teal-mid);pointer-events:none;font-size:12px}
-
-  .divider{height:1px;background:#eef0f4;margin:20px 0}
-
+    color:var(--teal-deep);pointer-events:none;font-size:12px}
   .fname-preview{background:linear-gradient(135deg,#e8f5e9,#e3f2fd);border:1.5px solid rgba(13,140,124,.25);
     border-radius:10px;padding:12px 16px;margin-bottom:14px;font-size:12px;color:var(--gray-dark);line-height:1.7}
   .fname-preview strong{color:var(--teal-deep);font-size:13px;display:block;margin-bottom:3px}
   .fname-code{font-family:'Courier New',monospace;font-size:12px;color:var(--blue-deep);
     background:rgba(13,101,192,.08);padding:3px 8px;border-radius:5px;display:inline-block;margin-top:2px}
   .fname-placeholder{color:var(--gray-mid)}
-
   .notice-box{background:linear-gradient(135deg,#e8f5e9,#e3f2fd);border:1px solid rgba(13,140,124,.2);
     border-radius:10px;padding:11px 14px;margin-bottom:16px;font-size:12px;color:var(--gray-dark);line-height:1.8}
   .notice-box strong{color:var(--blue-deep);display:block;margin-bottom:2px}
   code{background:rgba(13,140,124,.1);padding:1px 6px;border-radius:4px;font-size:11px}
-
   .file-drop{border:2px dashed rgba(13,140,124,.3);border-radius:12px;padding:24px;text-align:center;
     cursor:pointer;background:var(--mint-glow);position:relative;transition:all .2s;margin-bottom:14px}
   .file-drop:hover,.file-drop.drag-over{border-color:var(--teal-mid);background:#c6f4ec;transform:translateY(-1px)}
@@ -96,9 +86,7 @@
     background:rgba(13,140,124,.1);padding:5px 10px;border-radius:6px;display:none;word-break:break-all}
   .ferr{font-size:12px;color:var(--danger);background:#ffebee;border-radius:6px;
     padding:7px 10px;margin-bottom:12px;display:none}
-
   .pw-tip{font-size:11px;color:var(--gray-mid);margin-top:5px;line-height:1.5}
-
   .tmpl-bar{display:flex;align-items:center;justify-content:space-between;
     background:var(--ocean-glow);border:1px solid rgba(21,101,192,.2);
     border-radius:10px;padding:12px 16px;margin-bottom:20px}
@@ -108,44 +96,42 @@
     background:linear-gradient(135deg,var(--blue-mid),var(--teal-mid));
     color:#fff;font-family:'Gmarket Sans',sans-serif;font-size:12px;font-weight:700;
     border:none;cursor:pointer;box-shadow:0 2px 10px rgba(13,101,192,.3);transition:all .2s;white-space:nowrap}
-  .btn-tmpl:hover{transform:translateY(-1px);box-shadow:0 5px 16px rgba(13,101,192,.4)}
-
+  .btn-tmpl:hover{transform:translateY(-1px)}
   .btn-submit{width:100%;padding:14px;border:none;border-radius:12px;
     background:linear-gradient(135deg,var(--blue-mid),var(--teal-mid));
     color:#fff;font-family:'Gmarket Sans',sans-serif;font-size:15px;font-weight:700;
     cursor:pointer;letter-spacing:.3px;box-shadow:0 4px 18px rgba(13,101,192,.35);transition:all .2s;margin-top:4px}
   .btn-submit:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 8px 24px rgba(13,101,192,.45)}
   .btn-submit:disabled{opacity:.4;cursor:not-allowed;transform:none}
-
   .overlay{display:none;position:fixed;inset:0;background:rgba(13,61,107,.7);backdrop-filter:blur(6px);
     z-index:200;align-items:center;justify-content:center;padding:16px}
   .overlay.show{display:flex}
   .prog-box{background:#fff;border-radius:18px;padding:36px 40px;text-align:center;
-    max-width:320px;width:90%;box-shadow:0 24px 60px rgba(10,30,60,.35);animation:slideUp .3s cubic-bezier(.34,1.56,.64,1)}
+    max-width:320px;width:90%;box-shadow:0 24px 60px rgba(10,30,60,.35);
+    animation:slideUp .3s cubic-bezier(.34,1.56,.64,1)}
   .spinner{width:52px;height:52px;border-radius:50%;border:4px solid rgba(13,140,124,.15);
     border-top-color:var(--teal-mid);animation:spin .8s linear infinite;margin:0 auto 16px}
   .prog-box h4{font-family:'Gmarket Sans',sans-serif;font-size:16px;color:var(--blue-deep);margin-bottom:6px}
   .prog-box p{font-size:12px;color:var(--gray-mid)}
-
-  .succ-box{background:#fff;border-radius:18px;padding:36px 40px;text-align:center;
-    max-width:400px;width:90%;box-shadow:0 24px 60px rgba(10,30,60,.35);animation:slideUp .3s cubic-bezier(.34,1.56,.64,1)}
-  .chk-circle{width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,var(--blue-mid),var(--teal-mid));
+  .succ-box{background:#fff;border-radius:18px;padding:36px 40px;text-align:center;position:relative;
+    max-width:400px;width:90%;box-shadow:0 24px 60px rgba(10,30,60,.35);
+    animation:slideUp .3s cubic-bezier(.34,1.56,.64,1)}
+  .succ-close{position:absolute;top:14px;right:14px;width:32px;height:32px;border-radius:50%;
+    background:rgba(0,0,0,.07);border:none;cursor:pointer;font-size:16px;color:var(--gray-dark);
+    display:flex;align-items:center;justify-content:center;transition:background .2s}
+  .succ-close:hover{background:rgba(0,0,0,.15)}
+  .chk-circle{width:64px;height:64px;border-radius:50%;
+    background:linear-gradient(135deg,var(--blue-mid),var(--teal-mid));
     display:flex;align-items:center;justify-content:center;font-size:28px;margin:0 auto 16px;
     box-shadow:0 8px 24px rgba(13,101,192,.35);animation:popIn .5s cubic-bezier(.34,1.56,.64,1)}
   .succ-box h4{font-family:'Gmarket Sans',sans-serif;font-size:18px;color:var(--blue-deep);margin-bottom:8px}
-  .succ-box p{font-size:13px;color:var(--gray-dark);line-height:1.7}
+  .succ-box>p{font-size:13px;color:var(--gray-dark);line-height:1.7}
   .res-card{background:var(--gray-soft);border-radius:10px;padding:14px 18px;margin:14px 0;
     text-align:left;font-size:12px;color:var(--gray-dark);line-height:2}
   .res-card span{font-weight:700;color:var(--blue-deep)}
   .no-badge{display:inline-block;background:#eaf4ff;border:1.5px solid var(--blue-light);
     color:var(--blue-deep);font-size:13px;font-weight:700;font-family:'Gmarket Sans',sans-serif;
     padding:2px 12px;border-radius:20px;margin-left:4px}
-  /* X close button on success overlay */
-  .succ-close{position:absolute;top:14px;right:14px;width:32px;height:32px;border-radius:50%;
-    background:rgba(0,0,0,.07);border:none;cursor:pointer;font-size:16px;color:var(--gray-dark);
-    display:flex;align-items:center;justify-content:center;transition:background .2s}
-  .succ-close:hover{background:rgba(0,0,0,.14)}
-  .succ-box{position:relative}
   .drive-path{font-size:11px;font-family:'Courier New',monospace;background:rgba(13,140,124,.08);
     color:var(--teal-deep);padding:5px 10px;border-radius:6px;margin-top:6px;word-break:break-all}
   .btn-again{margin-top:12px;padding:11px 28px;border-radius:50px;
@@ -153,15 +139,18 @@
     font-family:'Gmarket Sans',sans-serif;font-size:14px;font-weight:700;border:none;
     cursor:pointer;box-shadow:0 4px 16px rgba(13,101,192,.3);transition:all .2s}
   .btn-again:hover{transform:translateY(-1px)}
-
-  .footer{margin-top:24px;color:rgba(255,255,255,.4);font-size:11px;text-align:center;animation:fadeUp .6s ease both .3s}
-
+  .footer{margin-top:24px;color:rgba(255,255,255,.4);font-size:11px;text-align:center;
+    animation:fadeUp .6s ease both .3s}
   @keyframes fadeDown{from{opacity:0;transform:translateY(-18px)}to{opacity:1;transform:none}}
   @keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
   @keyframes slideUp{from{opacity:0;transform:translateY(28px) scale(.97)}to{opacity:1;transform:none}}
   @keyframes spin{to{transform:rotate(360deg)}}
   @keyframes popIn{from{transform:scale(.3);opacity:0}to{transform:scale(1);opacity:1}}
-  @media(max-width:480px){.form-row{grid-template-columns:1fr}.card-body{padding:22px 18px}.tmpl-bar{flex-direction:column;gap:10px;align-items:flex-start}}
+  @media(max-width:480px){
+    .form-row{grid-template-columns:1fr}
+    .card-body{padding:22px 18px}
+    .tmpl-bar{flex-direction:column;gap:10px;align-items:flex-start}
+  }
 </style>
 </head>
 <body>
@@ -180,7 +169,7 @@
 <div class="card">
   <div class="card-top">
     <h2>📋 문항 파일 제출</h2>
-    <p>아래 항목을 순서대로 작성해 주세요. — 파일명은 자동 부여됩니다.</p>
+    <p>아래 항목을 순서대로 작성해 주세요. 파일명은 자동 부여됩니다.</p>
   </div>
   <div class="card-body">
 
@@ -192,11 +181,10 @@
       <button class="btn-tmpl" id="tmplBtn">⬇ 양식 받기</button>
     </div>
 
-    <!-- ① 제출자 정보 -->
     <div class="sec-label">① 제출자 정보</div>
     <div class="form-group">
       <label>이름 <span class="req">*</span></label>
-      <input type="text" id="nameInput" placeholder="이름을 입력하세요" autocomplete="off">
+      <input type="text" id="nameInput" placeholder="이름을 입력하세요." autocomplete="off">
       <div class="name-hint" id="nameHint"></div>
     </div>
     <div class="form-row">
@@ -212,7 +200,6 @@
 
     <div class="divider"></div>
 
-    <!-- ② 문항 정보 -->
     <div class="sec-label">② 문항 정보</div>
     <div class="form-row">
       <div class="form-group">
@@ -220,10 +207,8 @@
         <div class="sel-wrap">
           <select id="subjectSel">
             <option value="">과목 선택</option>
-            <option>수학Ⅰ</option>
-            <option>수학Ⅱ</option>
-            <option>확률과 통계</option>
-            <option>미적분</option>
+            <option>수학Ⅰ</option><option>수학Ⅱ</option>
+            <option>확률과 통계</option><option>미적분</option>
           </select>
         </div>
       </div>
@@ -239,11 +224,10 @@
 
     <div class="divider"></div>
 
-    <!-- ③ 파일명 안내 -->
     <div class="sec-label">③ 파일명 안내</div>
-    <div class="fname-preview" id="fnPreview">
+    <div class="fname-preview">
       <strong>📎 자동 부여 파일명 형식</strong>
-      <span id="fnDisplay" class="fname-placeholder">과목과 내용영역을 선택하면 형식이 표시됩니다</span>
+      <span id="fnDisplay" class="fname-placeholder">과목과 내용영역을 선택하면 형식이 표시됩니다.</span>
     </div>
     <div class="notice-box">
       <strong>📌 파일명은 자동으로 부여됩니다.</strong>
@@ -251,28 +235,36 @@
       예) 전체 10번째 제출 → <code>수Ⅰ_삼각함수_010.hwp</code>
     </div>
 
-    <!-- ④ 파일 업로드 -->
     <div class="sec-label">④ 파일 업로드</div>
     <div class="file-drop" id="fileDrop">
       <input type="file" id="fileInput" accept=".hwp,.hwpx">
       <div class="fi">📎</div>
-      <p>클릭하거나 파일을 드래그하세요.<br><small style="color:#90a4ae">HWP · HWPX 파일만 가능합니다.</small></p>
+      <p>클릭하거나 파일을 드래그하세요.<br>
+        <small style="color:#90a4ae">HWP · HWPX 파일만 가능합니다.</small></p>
       <div class="sel-name" id="selName"></div>
     </div>
     <div class="ferr" id="fileErr"></div>
 
     <div class="divider"></div>
 
-    <!-- ⑤ 비밀번호 -->
     <div class="sec-label">⑤ 본인 확인 비밀번호</div>
     <div class="form-group">
       <label>비밀번호 설정 <span class="req">*</span></label>
-      <input type="password" id="pwInput" placeholder="숫자·문자 4자리 이상" maxlength="20" autocomplete="new-password">
+      <!-- readonly 트릭: 포커스 전까지 브라우저 자동완성 차단 -->
+      <input type="password" id="pwInput"
+        placeholder="숫자·문자 4자리 이상" maxlength="20"
+        autocomplete="off" readonly
+        onfocus="this.removeAttribute('readonly')"
+        onblur="if(!this.value)this.setAttribute('readonly','')">
       <p class="pw-tip">⚠️ 이 비밀번호로 제출 조회 및 수정이 가능합니다. 반드시 기억해 주세요.</p>
     </div>
     <div class="form-group">
       <label>비밀번호 확인 <span class="req">*</span></label>
-      <input type="password" id="pwConfirm" placeholder="비밀번호 재입력" maxlength="20">
+      <input type="password" id="pwConfirm"
+        placeholder="비밀번호 재입력" maxlength="20"
+        autocomplete="off" readonly
+        onfocus="this.removeAttribute('readonly')"
+        onblur="if(!this.value)this.setAttribute('readonly','')">
       <div class="ferr" id="pwErr" style="margin-top:6px;margin-bottom:0"></div>
     </div>
 
@@ -282,7 +274,7 @@
 
 <div class="footer">대전광역시교육청 · 2026 고교 수학 창의적 문항 개발 연구회</div>
 
-<!-- 진행 -->
+<!-- 업로드 진행 overlay -->
 <div class="overlay" id="progressOverlay">
   <div class="prog-box">
     <div class="spinner"></div>
@@ -291,15 +283,17 @@
   </div>
 </div>
 
-<!-- 완료 -->
+<!-- 제출 완료 overlay -->
 <div class="overlay" id="successOverlay">
   <div class="succ-box">
-    <button class="succ-close" id="closeSuccessBtn" title="닫기">✕</button>
+    <button class="succ-close" id="closeSuccessBtn" title="닫기 (ESC)">✕</button>
     <div class="chk-circle">✓</div>
     <h4>제출 완료!</h4>
     <p>문항이 성공적으로 제출되었습니다.</p>
     <div class="res-card" id="resCard"></div>
-    <p style="font-size:11px;color:var(--gray-mid)">🔐 비밀번호를 분실하면 관리자(대전전민고 김태환)에게 문의해 주세요.</p>
+    <p style="font-size:11px;color:var(--gray-mid)">
+      🔐 비밀번호를 분실하면 관리자(대전전민고 김태환)에게 문의해 주세요.
+    </p>
     <button class="btn-again" id="againBtn">🔄 다른 문항 제출하기</button>
   </div>
 </div>
@@ -307,7 +301,6 @@
 <script>
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw5kPbajF8INfXaifVa2uoCj7ofgJpnHJfs7RUaHjEiCkfje1i3dr1jwdWb2IO52V0DCA/exec";
 
-// Internal lookup only — NOT exposed to DOM as datalist
 const TEACHERS = [
   {name:"조경환",team:"Ⅰ팀",school:"대전매봉중학교"},
   {name:"한현구",team:"Ⅰ팀",school:"대전과학고등학교"},
@@ -331,15 +324,15 @@ const TEACHERS = [
   {name:"김나리",team:"Ⅳ팀",school:"명석고등학교"},
   {name:"이경민",team:"Ⅳ팀",school:"명석고등학교"},
 ];
-
 const AREAS = {
-  "수학Ⅰ":["지수함수와 로그함수","삼각함수","수열"],
-  "수학Ⅱ":["함수의 극한과 연속","미분","적분"],
+  "수학Ⅰ":    ["지수함수와 로그함수","삼각함수","수열"],
+  "수학Ⅱ":    ["함수의 극한과 연속","미분","적분"],
   "확률과 통계":["경우의 수","확률","통계"],
-  "미적분":["수열의 극한","미분법","적분법"],
+  "미적분":    ["수열의 극한","미분법","적분법"],
 };
 const SUBJ_SHORT = {"수학Ⅰ":"수Ⅰ","수학Ⅱ":"수Ⅱ","확률과 통계":"확통","미적분":"미적"};
 
+// DOM
 const nameInput  = document.getElementById('nameInput');
 const nameHint   = document.getElementById('nameHint');
 const teamInput  = document.getElementById('teamInput');
@@ -355,14 +348,17 @@ const pwInput    = document.getElementById('pwInput');
 const pwConfirm  = document.getElementById('pwConfirm');
 const pwErr      = document.getElementById('pwErr');
 const submitBtn  = document.getElementById('submitBtn');
+const progressOv = document.getElementById('progressOverlay');
+const successOv  = document.getElementById('successOverlay');
 
-// Name — plain typing, debounced lookup, no datalist
+// ── 이름 자동완성 (debounced, no datalist) ──
 let nameTimer = null;
 nameInput.addEventListener('input', () => {
   clearTimeout(nameTimer);
   nameTimer = setTimeout(() => {
-    const t = TEACHERS.find(x => x.name === nameInput.value.trim());
-    if (!nameInput.value.trim()) {
+    const val = nameInput.value.trim();
+    const t   = TEACHERS.find(x => x.name === val);
+    if (!val) {
       clearTeacher(); nameHint.className='name-hint'; nameInput.classList.remove('name-err');
     } else if (t) {
       teamInput.value=t.team; schoolInp.value=t.school;
@@ -379,18 +375,17 @@ nameInput.addEventListener('input', () => {
     validate();
   }, 350);
 });
-
-function clearTeacher() {
+function clearTeacher(){
   teamInput.value=''; schoolInp.value='';
   teamInput.classList.remove('auto-filled'); schoolInp.classList.remove('auto-filled');
 }
 
-// Subject → area cascade
+// ── 과목 → 내용영역 연동 ──
 subjectSel.addEventListener('change', () => {
-  const areas = AREAS[subjectSel.value]||[];
-  areaSel.innerHTML='<option value="">내용 영역 선택</option>';
+  const areas = AREAS[subjectSel.value] || [];
+  areaSel.innerHTML = '<option value="">내용 영역 선택</option>';
   areas.forEach(a => { const o=document.createElement('option'); o.value=o.textContent=a; areaSel.appendChild(o); });
-  areaSel.disabled=!areas.length;
+  areaSel.disabled = !areas.length;
   updateFnPreview(); validate();
 });
 areaSel.addEventListener('change', () => { updateFnPreview(); validate(); });
@@ -402,78 +397,95 @@ function updateFnPreview() {
   fnDisplay.textContent=`${SUBJ_SHORT[s]||s}_${a}_순번.hwp`;
 }
 
-// File
+// ── 파일 처리 ──
 fileInput.addEventListener('change', handleFile);
-fileDrop.addEventListener('dragover',e=>{e.preventDefault();fileDrop.classList.add('drag-over')});
-fileDrop.addEventListener('dragleave',()=>fileDrop.classList.remove('drag-over'));
-fileDrop.addEventListener('drop',e=>{e.preventDefault();fileDrop.classList.remove('drag-over');
-  if(e.dataTransfer.files.length){fileInput.files=e.dataTransfer.files;handleFile()}});
-
+fileDrop.addEventListener('dragover', e => { e.preventDefault(); fileDrop.classList.add('drag-over'); });
+fileDrop.addEventListener('dragleave', () => fileDrop.classList.remove('drag-over'));
+fileDrop.addEventListener('drop', e => {
+  e.preventDefault(); fileDrop.classList.remove('drag-over');
+  if (e.dataTransfer.files.length) { fileInput.files=e.dataTransfer.files; handleFile(); }
+});
 function handleFile() {
   fileErr.style.display='none'; selName.style.display='none';
-  const file=fileInput.files[0]; if(!file){validate();return;}
+  const file=fileInput.files[0]; if (!file) { validate(); return; }
   const ext=file.name.split('.').pop().toLowerCase();
-  if(!['hwp','hwpx'].includes(ext)){
+  if (!['hwp','hwpx'].includes(ext)) {
     fileErr.textContent='⛔ HWP 또는 HWPX 파일만 제출 가능합니다.';
     fileErr.style.display='block'; fileInput.value=''; validate(); return;
   }
   selName.textContent='📄 '+file.name; selName.style.display='block'; validate();
 }
 
-// Password
-pwInput.addEventListener('input',()=>{chkPw();validate()});
-pwConfirm.addEventListener('input',()=>{chkPw();validate()});
-function chkPw(){
-  if(!pwInput.value&&!pwConfirm.value){pwErr.style.display='none';return}
-  if(pwInput.value.length<4){pwErr.textContent='⛔ 비밀번호는 4자리 이상이어야 합니다.';pwErr.style.display='block';return}
-  if(pwConfirm.value&&pwInput.value!==pwConfirm.value){pwErr.textContent='⛔ 비밀번호가 일치하지 않습니다.';pwErr.style.display='block';return}
+// ── 비밀번호 검증 ──
+pwInput.addEventListener('input', () => { chkPw(); validate(); });
+pwConfirm.addEventListener('input', () => { chkPw(); validate(); });
+function chkPw() {
+  if (!pwInput.value && !pwConfirm.value) { pwErr.style.display='none'; return; }
+  if (pwInput.value.length < 4) {
+    pwErr.textContent='⛔ 비밀번호는 4자리 이상이어야 합니다.'; pwErr.style.display='block'; return;
+  }
+  if (pwConfirm.value && pwInput.value !== pwConfirm.value) {
+    pwErr.textContent='⛔ 비밀번호가 일치하지 않습니다.'; pwErr.style.display='block'; return;
+  }
   pwErr.style.display='none';
 }
 
-function validate(){
+// ── 전체 유효성 검사 ──
+function validate() {
   const ok = TEACHERS.some(x=>x.name===nameInput.value.trim())
     && !!subjectSel.value && !!areaSel.value
     && fileInput.files.length>0 && fileErr.style.display==='none'
     && pwInput.value.length>=4 && pwInput.value===pwConfirm.value;
-  submitBtn.disabled=!ok;
+  submitBtn.disabled = !ok;
 }
 
-// Submit
+// ── 제출 ──
 submitBtn.addEventListener('click', async () => {
   const file    = fileInput.files[0];
   const teacher = TEACHERS.find(x=>x.name===nameInput.value.trim());
   const ext     = file.name.split('.').pop().toLowerCase();
-  document.getElementById('progressOverlay').classList.add('show');
-  submitBtn.disabled=true;
+  progressOv.classList.add('show');
+  submitBtn.disabled = true;
 
-  const base64 = await new Promise((res,rej)=>{
-    const r=new FileReader();
-    r.onload=e=>res(e.target.result.split(',')[1]); r.onerror=()=>rej(new Error('파일 읽기 실패'));
-    r.readAsDataURL(file);
-  });
+  let base64;
+  try {
+    base64 = await new Promise((res,rej) => {
+      const r=new FileReader();
+      r.onload=e=>res(e.target.result.split(',')[1]);
+      r.onerror=()=>rej(new Error('파일 읽기 실패'));
+      r.readAsDataURL(file);
+    });
+  } catch(e) {
+    progressOv.classList.remove('show');
+    alert('파일을 읽는 중 오류가 발생했습니다. 다시 시도해 주세요.');
+    submitBtn.disabled=false; return;
+  }
 
-  const payload={action:'submit',name:teacher.name,team:teacher.team,school:teacher.school,
-    subject:subjectSel.value,area:areaSel.value,ext,fileData:base64,
-    mimeType:file.type||'application/octet-stream',password:pwInput.value};
+  const payload = {
+    action:'submit', name:teacher.name, team:teacher.team, school:teacher.school,
+    subject:subjectSel.value, area:areaSel.value, ext,
+    fileData:base64, mimeType:file.type||'application/octet-stream',
+    password:pwInput.value,
+  };
 
   try {
-    const res=await fetch(SCRIPT_URL,{method:'POST',body:JSON.stringify(payload)});
-    const json=await res.json();
-    document.getElementById('progressOverlay').classList.remove('show');
-    if(json.status==='ok') showSuccess(json,teacher,ext);
-    else{alert('오류: '+(json.message||'알 수 없는 오류'));submitBtn.disabled=false;}
+    const res  = await fetch(SCRIPT_URL, {method:'POST', body:JSON.stringify(payload)});
+    const json = await res.json();
+    progressOv.classList.remove('show');
+    if (json.status==='ok') showSuccess(json, teacher);
+    else { alert('오류: '+(json.message||'알 수 없는 오류')); submitBtn.disabled=false; }
   } catch(err) {
-    document.getElementById('progressOverlay').classList.remove('show');
-    // Demo mode
+    progressOv.classList.remove('show');
+    // 데모 모드
     const no=String(Math.floor(Math.random()*29)+2).padStart(3,'0');
     const s=SUBJ_SHORT[subjectSel.value]||subjectSel.value;
     showSuccess({status:'ok',itemNo:no,fileName:`${s}_${areaSel.value}_${no}.${ext}`,
-      drivePath:`${subjectSel.value} ＞ ${areaSel.value}`},teacher,ext);
-    console.warn('데모 모드:',err.message);
+      drivePath:`${subjectSel.value} ＞ ${areaSel.value}`}, teacher);
+    console.warn('데모 모드:', err.message);
   }
 });
 
-function showSuccess(json,teacher,ext){
+function showSuccess(json, teacher) {
   document.getElementById('resCard').innerHTML=`
     <div>문항번호 <span class="no-badge">No. ${json.itemNo}</span></div>
     <div>제출자 &nbsp;&nbsp;: <span>${teacher.name} (${teacher.team} · ${teacher.school})</span></div>
@@ -481,43 +493,35 @@ function showSuccess(json,teacher,ext){
     <div>내용영역 : <span>${areaSel.value}</span></div>
     <div>파일명 &nbsp;&nbsp;: <span style="font-family:monospace;font-size:11px">${json.fileName}</span></div>
     <div class="drive-path">📂 저장 위치: ${json.drivePath||subjectSel.value+' ＞ '+areaSel.value}</div>`;
-  document.getElementById('successOverlay').classList.add('show');
+  successOv.classList.add('show');
 }
 
-document.getElementById('againBtn').addEventListener('click',()=>{
-  document.getElementById('successOverlay').classList.remove('show'); resetForm();
-});
-document.getElementById('closeSuccessBtn').addEventListener('click',()=>{
-  document.getElementById('successOverlay').classList.remove('show'); resetForm();
-});
-// ESC key closes success overlay
+// ── 완료 창 닫기 (버튼·ESC) ──
+function closeSuccess() { successOv.classList.remove('show'); resetForm(); }
+document.getElementById('againBtn').addEventListener('click', closeSuccess);
+document.getElementById('closeSuccessBtn').addEventListener('click', closeSuccess);
 document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') {
-    const overlay = document.getElementById('successOverlay');
-    if (overlay.classList.contains('show')) {
-      overlay.classList.remove('show'); resetForm();
-    }
-  }
+  if (e.key==='Escape' && successOv.classList.contains('show')) closeSuccess();
 });
 
-function resetForm(){
+// ── 폼 초기화 ──
+function resetForm() {
   nameInput.value=''; nameInput.classList.remove('name-err'); nameHint.className='name-hint'; clearTeacher();
-  subjectSel.value=''; areaSel.innerHTML='<option value="">과목 먼저 선택</option>'; areaSel.disabled=true;
+  subjectSel.value='';
+  areaSel.innerHTML='<option value="">과목 먼저 선택</option>'; areaSel.disabled=true;
   fileInput.value=''; selName.style.display='none'; fileErr.style.display='none';
-  pwInput.value=''; pwConfirm.value=''; pwErr.style.display='none';
+  pwInput.value=''; pwInput.setAttribute('readonly','');
+  pwConfirm.value=''; pwConfirm.setAttribute('readonly','');
+  pwErr.style.display='none';
   updateFnPreview(); validate();
 }
 
-document.getElementById('tmplBtn').addEventListener('click',()=>{
-  const RAW_URL = "https://github.com/galois1016-cloud/math-submit/raw/refs/heads/main/form.hwp"; // ← raw.githubusercontent.com 링크로 교체
-  if(!RAW_URL){alert('양식 파일 준비 중입니다.\n관리자(대전전민고 김태환)에게 문의해 주세요.');return;}
-  // Force download via anchor element
-  const a = document.createElement('a');
-  a.href = RAW_URL;
-  a.download = '문항작성양식.hwp';
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
+// ── 양식 다운로드 ──
+document.getElementById('tmplBtn').addEventListener('click', () => {
+  const RAW_URL = ""; // ← raw.githubusercontent.com 파일 URL로 교체
+  if (!RAW_URL) { alert('양식 파일 준비 중입니다.\n관리자(대전전민고 김태환)에게 문의해 주세요.'); return; }
+  const a=document.createElement('a'); a.href=RAW_URL; a.download='문항작성양식.hwp';
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
 });
 </script>
 </body>
