@@ -481,16 +481,32 @@ function renderItems(items) {
         <div class="item-filename">📄 ${item.fileName}</div>
         <div class="item-btn-row">
           <button class="btn-edit"
-            onclick="openEditModal('${item.id}','${item.itemNo}','${item.subject}','${item.area}')">
+            data-id="${item.id}"
+            data-itemno="${item.itemNo}"
+            data-subject="${item.subject}"
+            data-area="${item.area}">
             🔄 이 문항 수정하기
           </button>
           <button class="btn-delete"
-            onclick="openDeleteModal('${item.id}','${item.itemNo}')">
+            data-id="${item.id}"
+            data-itemno="${item.itemNo}">
             🗑️ 이 문항 삭제하기
           </button>
         </div>
       </div>
     </div>`).join('');
+
+  // 이벤트 위임으로 버튼 처리 (onclick 인라인 대신)
+  list.querySelectorAll('.btn-edit').forEach(btn => {
+    btn.addEventListener('click', () => {
+      openEditModal(btn.dataset.id, btn.dataset.itemno, btn.dataset.subject, btn.dataset.area);
+    });
+  });
+  list.querySelectorAll('.btn-delete').forEach(btn => {
+    btn.addEventListener('click', () => {
+      openDeleteModal(btn.dataset.id, btn.dataset.itemno);
+    });
+  });
 }
 
 // ── 로그아웃 ──
